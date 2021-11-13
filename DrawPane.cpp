@@ -36,8 +36,19 @@ DrawPane::DrawPane(QWidget *parent)
 
 void DrawPane::draw(const QPoint &p, const QColor &c)
 {
-  if (_img.rect().contains(p))
-    _img.setPixel(p, c.rgba());
+  _img.setPixel(p, c.rgba());
+}
+
+void DrawPane::leftAction()
+{
+  if (_img.rect().contains(_pixel))
+    draw(_pixel, _currentColor);
+}
+
+void DrawPane::rightAction()
+{
+  if (_img.rect().contains(_pixel))
+    draw(_pixel, Qt::transparent);
 }
 
 void DrawPane::paintEvent(QPaintEvent *pe)
@@ -73,9 +84,9 @@ void DrawPane::mousePressEvent(QMouseEvent *me)
   QWidget::mousePressEvent(me);
 
   if (me->buttons() == Qt::LeftButton)
-    draw(_pixel, Qt::red);
+    leftAction();
   else if (me->buttons() == Qt::RightButton)
-    draw(_pixel, Qt::transparent);
+    rightAction();
   else
     return;
   update();
@@ -94,9 +105,9 @@ void DrawPane::mouseMoveEvent(QMouseEvent *me)
     _pixel = _p;
 
     if (me->buttons() == Qt::LeftButton)
-      draw(_pixel, Qt::red);
+      leftAction();
     if (me->buttons() == Qt::RightButton)
-      draw(_pixel, Qt::transparent);
+      rightAction();
   }
 
   if (me->buttons() == Qt::MidButton)

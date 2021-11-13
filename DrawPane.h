@@ -13,11 +13,15 @@ class DrawPane : public QWidget
 
   QPoint _pixel;
 
+  QColor _currentColor;
+
 public:
   explicit DrawPane(QWidget *parent = nullptr);
 
 private:
   void draw(const QPoint &p, const QColor &c);
+  void leftAction();
+  void rightAction();
 
   void paintEvent(QPaintEvent *pe);
   void mousePressEvent(QMouseEvent *me);
