@@ -20,6 +20,7 @@ public:
 
 private slots:
   void on_pbForegroundColor_clicked();
+  void on_acSelectColor_triggered(bool);
 
 private:
   static void background(QWidget *w, const QColor &c);

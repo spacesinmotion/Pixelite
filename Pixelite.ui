@@ -73,6 +73,33 @@
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="acSelectColor"/>
+  </widget>
+  <action name="acSelectColor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Select color</string>
+   </property>
+   <property name="toolTip">
+    <string>Select color from image</string>
+   </property>
+   <property name="shortcut">
+    <string>S</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

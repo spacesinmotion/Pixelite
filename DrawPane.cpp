@@ -41,8 +41,21 @@ void DrawPane::draw(const QPoint &p, const QColor &c)
 
 void DrawPane::leftAction()
 {
-  if (_img.rect().contains(_pixel))
+  if (!_img.rect().contains(_pixel))
+    return;
+
+  if (_currentMode == Draw)
     draw(_pixel, _currentColor);
+  else if (_currentMode == PickColor)
+  {
+    _currentColor = _img.pixelColor(_pixel);
+    _currentMode = Draw;
+    if (_onFished)
+    {
+      _onFished();
+      _onFished = nullptr;
+    }
+  }
 }
 
 void DrawPane::rightAction()
@@ -72,8 +85,12 @@ void DrawPane::paintEvent(QPaintEvent *pe)
 
   p.setPen(QPen(Qt::black, 0.0));
   p.drawRect(0, 0, _img.width(), _img.height());
-  p.setPen(QPen(Qt::red, 0.0));
-  p.drawRect(QRect(_pixel, QSize(1, 1)));
+
+  if (_img.rect().contains(_pixel))
+  {
+    p.setPen(QPen(Qt::red, 0.0));
+    p.drawRect(QRect(_pixel, QSize(1, 1)));
+  }
 
   return QWidget::paintEvent(pe);
 }

@@ -23,6 +23,18 @@ void Pixelite::on_pbForegroundColor_clicked()
   }
 }
 
+void Pixelite::on_acSelectColor_triggered(bool on)
+{
+  if (!on)
+    return;
+
+  ui->drawPane->pickColorMode([this]
+                              {
+                                ui->acSelectColor->setChecked(false);
+                                background(ui->pbForegroundColor, ui->drawPane->currentColor());
+                              });
+}
+
 void Pixelite::background(QWidget *w, const QColor &c)
 {
   w->setStyleSheet(QString("background-color: %1").arg(c.name()));

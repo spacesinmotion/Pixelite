@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <functional>
 
 class DrawPane : public QWidget
 {
@@ -15,6 +16,16 @@ class DrawPane : public QWidget
 
   QColor _currentColor;
 
+  enum Mode
+  {
+    Draw,
+    PickColor
+  };
+  Mode _currentMode{Draw};
+
+  using CB = std::function<void()>;
+  CB _onFished;
+
 public:
   explicit DrawPane(QWidget *parent = nullptr);
 
@@ -23,6 +34,13 @@ public:
   {
     _currentColor = c;
     update();
+  }
+
+  void drawMode() { _currentMode = Draw; }
+  void pickColorMode(const CB &onFinish)
+  {
+    _currentMode = PickColor;
+    _onFished = onFinish;
   }
 
 private:
