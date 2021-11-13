@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QSettings>
 
-#include "DrawPane.h"
+#include "Pixelite.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
 
   QSettings::setDefaultFormat(QSettings::IniFormat);
 
-  DrawPane pane;
-  pane.show();
+  Pixelite w;
+  w.show();
 
   return a.exec();
 }

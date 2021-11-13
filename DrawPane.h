@@ -18,6 +18,13 @@ class DrawPane : public QWidget
 public:
   explicit DrawPane(QWidget *parent = nullptr);
 
+  const QColor &currentColor() { return _currentColor; }
+  void setCurrentColor(const QColor &c)
+  {
+    _currentColor = c;
+    update();
+  }
+
 private:
   void draw(const QPoint &p, const QColor &c);
   void leftAction();

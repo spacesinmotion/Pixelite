@@ -110,7 +110,7 @@ void DrawPane::mouseMoveEvent(QMouseEvent *me)
       rightAction();
   }
 
-  if (me->buttons() == Qt::MidButton)
+  if (me->buttons() == Qt::MiddleButton)
   {
     auto m = it.map(QPointF(me->pos())) - it.map(QPointF(_mouse_start));
     _transform.translate(m.x(), m.y());

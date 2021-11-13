@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(Pixelite VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
@@ -17,8 +17,13 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_executable(Pixelite
   PixeliteMain.cpp
+  Pixelite.cpp
+  Pixelite.h
+  Pixelite.ui
   DrawPane.cpp
   DrawPane.h
 )
+
+target_include_directories(Pixelite PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(Pixelite Qt5::Widgets)
