@@ -19,7 +19,7 @@ public:
   ~Pixelite();
 
 private slots:
-  void on_pbForegroundColor_clicked();
+  void on_acColor_triggered();
   void on_acSelectColor_triggered(bool);
 
 private:
