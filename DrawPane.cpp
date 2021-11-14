@@ -8,18 +8,17 @@
 DrawPane::DrawPane(QWidget *parent) : QWidget{parent}
 {
   setMouseTracking(true);
+}
 
-  _img = QImage(16, 16, QImage::Format_ARGB32);
-  for (int i = 0; i < 16; ++i)
-  {
-    for (int j = 0; j < 16; ++j)
-    {
-      if (i % 2 == 0 && j % 2 == 0)
-        _img.setPixel(i, j, QColor(Qt::red).rgba());
-      else
-        _img.setPixel(i, j, QColor(Qt::transparent).rgba());
-    }
-  }
+void DrawPane::setCurrentImage(const QImage &img)
+{
+  _undoStack.clear();
+  _redoStack.clear();
+  emit undoAvailable(false);
+  emit redoAvailable(false);
+  mark_saved();
+  _img = img;
+
   _back_img = QImage(_img.width() * 2, _img.height() * 2, QImage::Format_ARGB32);
   for (int i = 0; i < _back_img.width(); ++i)
   {
@@ -33,10 +32,11 @@ DrawPane::DrawPane(QWidget *parent) : QWidget{parent}
   }
 }
 
-void DrawPane::setCurrentImage(const QImage &img)
+void DrawPane::newImage(const QSize &s)
 {
-  newImage();
-  _img = img;
+  QImage i(s, QImage::Format_ARGB32);
+  i.fill(Qt::transparent);
+  setCurrentImage(i);
 }
 
 void DrawPane::undo()
@@ -69,16 +69,6 @@ void DrawPane::redo()
     emit redoAvailable(false);
 
   update();
-}
-
-void DrawPane::newImage()
-{
-  _img.fill(Qt::transparent);
-  _undoStack.clear();
-  _redoStack.clear();
-  emit undoAvailable(false);
-  emit redoAvailable(false);
-  mark_saved();
 }
 
 void DrawPane::push_undo()

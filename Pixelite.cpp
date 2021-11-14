@@ -1,5 +1,6 @@
 #include "Pixelite.h"
 
+#include "NewImageDialog.h"
 #include "ui_Pixelite.h"
 
 #include <QCloseEvent>
@@ -20,7 +21,7 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   connect(ui->actionUndo, &QAction::triggered, ui->drawPane, &DrawPane::undo);
   connect(ui->actionRedo, &QAction::triggered, ui->drawPane, &DrawPane::redo);
 
-  ui->drawPane->newImage();
+  ui->drawPane->newImage(QSize(16, 16));
 }
 
 Pixelite::~Pixelite() = default;
@@ -30,7 +31,15 @@ void Pixelite::on_actionNew_triggered()
   if (!check_saved())
     return;
 
-  ui->drawPane->newImage();
+  ui->drawPane->hide();
+
+  auto *newImageD = new NewImageDialog(ui->centralwidget);
+  ui->centralwidget->layout()->addWidget(newImageD);
+  newImageD->onAppy([this, newImageD](const auto &s) {
+    ui->drawPane->newImage(s);
+    ui->drawPane->show();
+    newImageD->deleteLater();
+  });
 }
 
 void Pixelite::on_actionOpen_triggered()

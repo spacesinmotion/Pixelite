@@ -54,11 +54,11 @@ public:
   void mark_saved() { _saved = true; }
   bool has_changed() const { return !_saved; }
 
+  void newImage(const QSize &s);
+
 public slots:
   void undo();
   void redo();
-
-  void newImage();
 
 signals:
   void undoAvailable(bool);

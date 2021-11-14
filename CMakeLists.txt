@@ -20,6 +20,9 @@ add_executable(Pixelite
   Pixelite.cpp
   Pixelite.h
   Pixelite.ui
+  NewImageDialog.cpp
+  NewImageDialog.h
+  NewImageDialog.ui
   DrawPane.cpp
   DrawPane.h
 )
