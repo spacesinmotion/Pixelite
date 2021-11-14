@@ -33,6 +33,12 @@ DrawPane::DrawPane(QWidget *parent) : QWidget{parent}
   }
 }
 
+void DrawPane::setCurrentImage(const QImage &img)
+{
+  newImage();
+  _img = img;
+}
+
 void DrawPane::undo()
 {
   if (_undoStack.empty())
@@ -43,6 +49,7 @@ void DrawPane::undo()
     emit redoAvailable(true);
 
   _img = _undoStack.pop();
+  _saved = false;
   if (_undoStack.empty())
     emit undoAvailable(false);
 
@@ -57,6 +64,7 @@ void DrawPane::redo()
   push_undo();
 
   _img = _redoStack.pop();
+  _saved = false;
   if (_redoStack.empty())
     emit redoAvailable(false);
 
@@ -70,6 +78,7 @@ void DrawPane::newImage()
   _redoStack.clear();
   emit undoAvailable(false);
   emit redoAvailable(false);
+  mark_saved();
 }
 
 void DrawPane::push_undo()
@@ -84,6 +93,7 @@ void DrawPane::start_action()
   if (!_actionStart)
     return;
 
+  _saved = false;
   _redoStack.clear();
   push_undo();
   _actionStart = false;

@@ -27,6 +27,7 @@ class DrawPane : public QWidget
   };
   Mode _currentMode{Draw};
   bool _actionStart{true};
+  bool _saved{true};
 
   using CB = std::function<void()>;
   CB _onFished;
@@ -49,6 +50,9 @@ public:
   }
 
   const QImage &currentImage() const { return _img; }
+  void setCurrentImage(const QImage &img);
+  void mark_saved() { _saved = true; }
+  bool has_changed() const { return !_saved; }
 
 public slots:
   void undo();
