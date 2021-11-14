@@ -129,7 +129,10 @@ void DrawPane::leftAction()
 void DrawPane::rightAction()
 {
   if (_img.rect().contains(_pixel))
+  {
+    start_action();
     draw(_pixel, Qt::transparent);
+  }
 }
 
 void DrawPane::paintEvent(QPaintEvent *pe)

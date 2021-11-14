@@ -72,9 +72,9 @@ private:
   void leftAction();
   void rightAction();
 
-  void paintEvent(QPaintEvent *pe);
-  void mousePressEvent(QMouseEvent *me);
-  void mouseMoveEvent(QMouseEvent *me);
-  void mouseReleaseEvent(QMouseEvent *me);
-  void wheelEvent(QWheelEvent *we);
+  void paintEvent(QPaintEvent *pe) final;
+  void mousePressEvent(QMouseEvent *me) final;
+  void mouseMoveEvent(QMouseEvent *me) final;
+  void mouseReleaseEvent(QMouseEvent *me) final;
+  void wheelEvent(QWheelEvent *we) final;
 };

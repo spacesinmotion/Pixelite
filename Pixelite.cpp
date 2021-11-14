@@ -2,6 +2,7 @@
 
 #include "ui_Pixelite.h"
 
+#include <QCloseEvent>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -98,6 +99,14 @@ void Pixelite::on_acSelectColor_triggered(bool on)
 void Pixelite::background(QWidget *w, const QColor &c)
 {
   w->setStyleSheet(QString("background-color: %1").arg(c.name()));
+}
+
+void Pixelite::closeEvent(QCloseEvent *ce)
+{
+  if (!check_saved())
+    ce->ignore();
+  else
+    QMainWindow::closeEvent(ce);
 }
 
 bool Pixelite::check_saved()
