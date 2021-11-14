@@ -10,6 +10,13 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   ui->setupUi(this);
 
   background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
+
+  connect(ui->drawPane, &DrawPane::undoAvailable, ui->actionUndo, &QAction::setEnabled);
+  connect(ui->drawPane, &DrawPane::redoAvailable, ui->actionRedo, &QAction::setEnabled);
+  connect(ui->actionUndo, &QAction::triggered, ui->drawPane, &DrawPane::undo);
+  connect(ui->actionRedo, &QAction::triggered, ui->drawPane, &DrawPane::redo);
+
+  ui->drawPane->newImage();
 }
 
 Pixelite::~Pixelite() = default;

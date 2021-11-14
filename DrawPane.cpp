@@ -33,6 +33,62 @@ DrawPane::DrawPane(QWidget *parent) : QWidget{parent}
   }
 }
 
+void DrawPane::undo()
+{
+  if (_undoStack.empty())
+    return;
+
+  _redoStack.push(_img);
+  if (_redoStack.size() == 1)
+    emit redoAvailable(true);
+
+  _img = _undoStack.pop();
+  if (_undoStack.empty())
+    emit undoAvailable(false);
+
+  update();
+}
+
+void DrawPane::redo()
+{
+  if (_redoStack.empty())
+    return;
+
+  push_undo();
+
+  _img = _redoStack.pop();
+  if (_redoStack.empty())
+    emit redoAvailable(false);
+
+  update();
+}
+
+void DrawPane::newImage()
+{
+  _img.fill(Qt::transparent);
+  _undoStack.clear();
+  _redoStack.clear();
+  emit undoAvailable(false);
+  emit redoAvailable(false);
+}
+
+void DrawPane::push_undo()
+{
+  _undoStack.push(_img);
+  if (_undoStack.size() == 1)
+    emit undoAvailable(true);
+}
+
+void DrawPane::start_action()
+{
+  if (!_actionStart)
+    return;
+
+  _redoStack.clear();
+  push_undo();
+  _actionStart = false;
+}
+
 void DrawPane::draw(const QPoint &p, const QColor &c)
 {
   _img.setPixel(p, c.rgba());
@@ -44,7 +100,10 @@ void DrawPane::leftAction()
     return;
 
   if (_currentMode == Draw)
+  {
+    start_action();
     draw(_pixel, _currentColor);
+  }
   else if (_currentMode == PickColor)
   {
     _currentColor = _img.pixelColor(_pixel);
@@ -140,6 +199,12 @@ void DrawPane::mouseMoveEvent(QMouseEvent *me)
     update();
 
   QWidget::mouseMoveEvent(me);
+}
+
+void DrawPane::mouseReleaseEvent(QMouseEvent *me)
+{
+  _actionStart = true;
+  QWidget::mouseReleaseEvent(me);
 }
 
 void DrawPane::wheelEvent(QWheelEvent *we)
