@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="icons">
+    <file alias="pipette.png">icons/pipette.png</file>
+    <file alias="empty.png">icons/empty.png</file>
+    <file alias="pen.png">icons/pen.png</file>
+  </qresource>
+</RCC>

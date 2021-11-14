@@ -20,6 +20,7 @@ add_executable(Pixelite
   Pixelite.cpp
   Pixelite.h
   Pixelite.ui
+  Pixelite.qrc
   NewImageDialog.cpp
   NewImageDialog.h
   NewImageDialog.ui

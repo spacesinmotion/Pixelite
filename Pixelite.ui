@@ -78,11 +78,16 @@
    </attribute>
    <addaction name="separator"/>
    <addaction name="acColor"/>
+   <addaction name="actionPen"/>
    <addaction name="acSelectColor"/>
   </widget>
   <action name="acSelectColor">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/pipette.png</normaloff>:/icons/pipette.png</iconset>
    </property>
    <property name="text">
     <string>Select color</string>
@@ -95,6 +100,10 @@
    </property>
   </action>
   <action name="acColor">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/empty.png</normaloff>:/icons/empty.png</iconset>
+   </property>
    <property name="text">
     <string>Color</string>
    </property>
@@ -166,6 +175,18 @@
     <string>clear recent</string>
    </property>
   </action>
+  <action name="actionPen">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/pen.png</normaloff>:/icons/pen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pen</string>
+   </property>
+   <property name="shortcut">
+    <string>D</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -175,6 +196,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="Pixelite.qrc"/>
+ </resources>
  <connections/>
 </ui>
