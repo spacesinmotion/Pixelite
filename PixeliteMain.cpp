@@ -1,8 +1,8 @@
 
+#include "Pixelite.h"
+
 #include <QApplication>
 #include <QSettings>
-
-#include "Pixelite.h"
 
 int main(int argc, char *argv[])
 {

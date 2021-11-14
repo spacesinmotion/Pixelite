@@ -1,12 +1,11 @@
 #include "DrawPane.h"
 
-#include <QPainter>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QWheelEvent>
 #include <cmath>
 
-DrawPane::DrawPane(QWidget *parent)
-    : QWidget{parent}
+DrawPane::DrawPane(QWidget *parent) : QWidget{parent}
 {
   setMouseTracking(true);
 
@@ -70,7 +69,8 @@ void DrawPane::paintEvent(QPaintEvent *pe)
   {
     const auto s = qreal(std::min(width(), height())) / 1.1 / qreal(_img.height());
     _transform.scale(s, s);
-    _transform.translate(width() / s / 2 - _img.width() / 2.0, height() / s / 2.0 - _img.height() / 2.0);
+    _transform.translate(width() / s / 2 - _img.width() / 2.0,
+                         height() / s / 2.0 - _img.height() / 2.0);
   }
 
   QPainter p(this);

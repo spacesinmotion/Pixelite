@@ -1,11 +1,11 @@
 #pragma once
 
-#include <memory>
 #include <QMainWindow>
+#include <memory>
 
 namespace Ui
 {
-  class Pixelite;
+class Pixelite;
 }
 
 class Pixelite : public QMainWindow
