@@ -23,6 +23,8 @@ public:
 private slots:
   void on_actionNew_triggered();
   void on_actionOpen_triggered();
+  void on_menuRecent_aboutToShow();
+  void on_actionclear_recent_triggered();
   bool on_actionSave_triggered();
   bool on_actionSave_as_triggered();
   void on_actionQuit_triggered();
@@ -36,4 +38,6 @@ private:
   void closeEvent(QCloseEvent *ce) final;
 
   bool check_saved();
+  void openFile(const QString &path);
+  void addRecent(const QString &path);
 };

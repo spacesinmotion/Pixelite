@@ -6,6 +6,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
 #include <QShortcut>
 
 Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<Ui::Pixelite>()}
@@ -37,13 +38,27 @@ void Pixelite::on_actionOpen_triggered()
   if (!check_saved())
     return;
 
-  const auto p = QFileDialog::getOpenFileName(this, qApp->applicationDisplayName(), _path,
-                                              tr("Images (*.png *.xpm *.jpg)"));
-  if (p.isEmpty())
-    return;
+  openFile(QFileDialog::getOpenFileName(this, qApp->applicationDisplayName(), _path,
+                                        tr("Images (*.png *.xpm *.jpg)")));
+}
 
-  _path = p;
-  ui->drawPane->setCurrentImage(QImage(_path));
+void Pixelite::on_menuRecent_aboutToShow()
+{
+  auto actions = ui->menuRecent->actions();
+  actions.removeAll(ui->actionclear_recent);
+  qDeleteAll(actions);
+
+  const auto recent = QSettings().value("Main/RecentFiles").toStringList();
+  for (const auto &p : recent)
+    ui->menuRecent->addAction(QFileInfo(p).fileName(), this, [this, p] { openFile(p); });
+  ui->menuRecent->addSeparator();
+  ui->menuRecent->addAction(ui->actionclear_recent);
+}
+
+void Pixelite::on_actionclear_recent_triggered()
+{
+  QSettings s;
+  s.remove("Main/RecentFiles");
 }
 
 bool Pixelite::on_actionSave_triggered()
@@ -67,6 +82,7 @@ bool Pixelite::on_actionSave_as_triggered()
   _path = p;
   ui->drawPane->currentImage().save(_path);
   ui->drawPane->mark_saved();
+  addRecent(p);
   return true;
 }
 
@@ -123,4 +139,26 @@ bool Pixelite::check_saved()
     return on_actionSave_triggered();
 
   return true;
+}
+
+void Pixelite::openFile(const QString &p)
+{
+  if (p.isEmpty())
+    return;
+
+  _path = p;
+  ui->drawPane->setCurrentImage(QImage(_path));
+
+  addRecent(p);
+}
+
+void Pixelite::addRecent(const QString &p)
+{
+  QSettings s;
+  auto recent = s.value("Main/RecentFiles").toStringList();
+  recent.removeAll(_path);
+  recent.prepend(_path);
+  while (recent.size() > 15)
+    recent.pop_back();
+  s.setValue("Main/RecentFiles", recent);
 }
