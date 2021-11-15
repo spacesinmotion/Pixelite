@@ -25,6 +25,8 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
 
   if (_path.isEmpty())
     ui->drawPane->newImage(QSize(16, 16));
+  else
+    openFile(_path);
 }
 
 Pixelite::~Pixelite() = default;
@@ -134,6 +136,10 @@ void Pixelite::loadSettings()
   QSettings s;
   restoreGeometry(s.value("Main/Geometry").toByteArray());
   restoreState(s.value("Main/State").toByteArray());
+
+  auto recent = s.value("Main/RecentFiles").toStringList();
+  if (!recent.isEmpty())
+    _path = recent.front();
 }
 
 void Pixelite::saveSettings() const
