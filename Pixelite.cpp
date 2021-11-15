@@ -21,7 +21,10 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   connect(ui->actionUndo, &QAction::triggered, ui->drawPane, &DrawPane::undo);
   connect(ui->actionRedo, &QAction::triggered, ui->drawPane, &DrawPane::redo);
 
-  ui->drawPane->newImage(QSize(16, 16));
+  loadSettings();
+
+  if (_path.isEmpty())
+    ui->drawPane->newImage(QSize(16, 16));
 }
 
 Pixelite::~Pixelite() = default;
@@ -126,12 +129,29 @@ void Pixelite::background(QWidget *w, const QColor &c)
   w->setStyleSheet(QString("background-color: %1").arg(c.name()));
 }
 
+void Pixelite::loadSettings()
+{
+  QSettings s;
+  restoreGeometry(s.value("Main/Geometry").toByteArray());
+  restoreState(s.value("Main/State").toByteArray());
+}
+
+void Pixelite::saveSettings() const
+{
+  QSettings s;
+  s.setValue("Main/Geometry", saveGeometry());
+  s.setValue("Main/State", saveState());
+}
+
 void Pixelite::closeEvent(QCloseEvent *ce)
 {
   if (!check_saved())
     ce->ignore();
   else
+  {
+    saveSettings();
     QMainWindow::closeEvent(ce);
+  }
 }
 
 bool Pixelite::check_saved()

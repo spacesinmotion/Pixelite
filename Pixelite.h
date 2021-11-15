@@ -35,6 +35,9 @@ private slots:
 private:
   static void background(QWidget *w, const QColor &c);
 
+  void loadSettings();
+  void saveSettings() const;
+
   void closeEvent(QCloseEvent *ce) final;
 
   bool check_saved();
