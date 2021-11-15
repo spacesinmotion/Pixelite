@@ -115,6 +115,10 @@
    </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/icons/new_file.png</normaloff>:/icons/icons/new_file.png</iconset>
+   </property>
    <property name="text">
     <string>New</string>
    </property>
@@ -123,6 +127,10 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/icons/open_file.png</normaloff>:/icons/icons/open_file.png</iconset>
+   </property>
    <property name="text">
     <string>Open</string>
    </property>
@@ -131,6 +139,10 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/icons/save_file.png</normaloff>:/icons/icons/save_file.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -139,6 +151,10 @@
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/icons/save_file_as.png</normaloff>:/icons/icons/save_file_as.png</iconset>
+   </property>
    <property name="text">
     <string>Save as</string>
    </property>
@@ -147,6 +163,10 @@
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/icons/quit.png</normaloff>:/icons/icons/quit.png</iconset>
+   </property>
    <property name="text">
     <string>Quit</string>
    </property>
