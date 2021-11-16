@@ -94,6 +94,18 @@ void DrawPane::draw(const QPoint &p, const QColor &c)
   _img.setPixel(p, c.rgba());
 }
 
+void DrawPane::fill(const QPoint &p, const QRgb &c, const QRgb &t)
+{
+  if (!_img.rect().contains(p) || _img.pixel(p) == c || _img.pixel(p) != t)
+    return;
+
+  _img.setPixel(p, c);
+  fill(QPoint(p.x() + 1, p.y()), c, t);
+  fill(QPoint(p.x() - 1, p.y()), c, t);
+  fill(QPoint(p.x(), p.y() + 1), c, t);
+  fill(QPoint(p.x(), p.y() - 1), c, t);
+}
+
 void DrawPane::leftAction()
 {
   if (!_img.rect().contains(_pixel))
@@ -114,14 +126,39 @@ void DrawPane::leftAction()
       _onFished = nullptr;
     }
   }
+  else if (_currentMode == FillColor)
+  {
+    start_action();
+    fill(_pixel, _currentColor.rgba(), _img.pixel(_pixel));
+    _currentMode = Draw;
+    if (_onFished)
+    {
+      _onFished();
+      _onFished = nullptr;
+    }
+  }
 }
 
 void DrawPane::rightAction()
 {
-  if (_img.rect().contains(_pixel))
+  if (!_img.rect().contains(_pixel))
+    return;
+
+  if (_currentMode == Draw)
   {
     start_action();
     draw(_pixel, Qt::transparent);
+  }
+  else if (_currentMode == FillColor)
+  {
+    start_action();
+    fill(_pixel, QColor(Qt::transparent).rgba(), _img.pixel(_pixel));
+    _currentMode = Draw;
+    if (_onFished)
+    {
+      _onFished();
+      _onFished = nullptr;
+    }
   }
 }
 

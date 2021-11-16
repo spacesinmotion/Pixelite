@@ -80,6 +80,7 @@
    <addaction name="acColor"/>
    <addaction name="actionPen"/>
    <addaction name="acSelectColor"/>
+   <addaction name="actionFill"/>
   </widget>
   <action name="acSelectColor">
    <property name="checkable">
@@ -204,6 +205,9 @@
    </property>
   </action>
   <action name="actionPen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="Pixelite.qrc">
      <normaloff>:/icons/pen.png</normaloff>:/icons/pen.png</iconset>
@@ -213,6 +217,21 @@
    </property>
    <property name="shortcut">
     <string>D</string>
+   </property>
+  </action>
+  <action name="actionFill">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/icons/fill.png</normaloff>:/icons/icons/fill.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fill</string>
+   </property>
+   <property name="shortcut">
+    <string>F</string>
    </property>
   </action>
  </widget>

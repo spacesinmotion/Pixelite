@@ -126,6 +126,14 @@ void Pixelite::on_acSelectColor_triggered(bool on)
   });
 }
 
+void Pixelite::on_actionFill_triggered(bool on)
+{
+  if (!on)
+    return;
+
+  ui->drawPane->fillColorMode([this] { ui->actionFill->setChecked(false); });
+}
+
 void Pixelite::background(QWidget *w, const QColor &c)
 {
   w->setStyleSheet(QString("background-color: %1").arg(c.name()));

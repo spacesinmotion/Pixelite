@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/fill.png</file>
     <file>icons/redo.png</file>
     <file>icons/undo.png</file>
     <file>icons/new_file.png</file>

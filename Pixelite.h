@@ -31,6 +31,7 @@ private slots:
 
   void on_acColor_triggered();
   void on_acSelectColor_triggered(bool);
+  void on_actionFill_triggered(bool);
 
 private:
   static void background(QWidget *w, const QColor &c);

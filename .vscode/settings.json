@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.fe": "clojure",
+    "typeinfo": "cpp"
+  }
+}

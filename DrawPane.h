@@ -23,7 +23,8 @@ class DrawPane : public QWidget
   enum Mode
   {
     Draw,
-    PickColor
+    PickColor,
+    FillColor,
   };
   Mode _currentMode{Draw};
   bool _actionStart{true};
@@ -48,6 +49,11 @@ public:
     _currentMode = PickColor;
     _onFished = onFinish;
   }
+  void fillColorMode(const CB &onFinish)
+  {
+    _currentMode = FillColor;
+    _onFished = onFinish;
+  }
 
   const QImage &currentImage() const { return _img; }
   void setCurrentImage(const QImage &img);
@@ -69,6 +75,7 @@ private:
   void start_action();
 
   void draw(const QPoint &p, const QColor &c);
+  void fill(const QPoint &p, const QRgb &c, const QRgb &t);
   void leftAction();
   void rightAction();
 
