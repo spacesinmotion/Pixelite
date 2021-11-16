@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "*.fe": "clojure",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "qactiongroup": "cpp"
   }
 }

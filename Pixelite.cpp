@@ -3,6 +3,7 @@
 #include "NewImageDialog.h"
 #include "ui_Pixelite.h"
 
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QColorDialog>
 #include <QFileDialog>
@@ -13,6 +14,12 @@
 Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<Ui::Pixelite>()}
 {
   ui->setupUi(this);
+
+  auto *ag = new QActionGroup(this);
+  ag->addAction(ui->actionPen);
+  ag->addAction(ui->acSelectColor);
+  ag->addAction(ui->actionFill);
+  ui->actionPen->setChecked(true);
 
   background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
 
@@ -115,13 +122,21 @@ void Pixelite::on_acColor_triggered()
   }
 }
 
+void Pixelite::on_actionPen_triggered(bool on)
+{
+  if (!on)
+    return;
+
+  ui->drawPane->drawMode();
+}
+
 void Pixelite::on_acSelectColor_triggered(bool on)
 {
   if (!on)
     return;
 
   ui->drawPane->pickColorMode([this] {
-    ui->acSelectColor->setChecked(false);
+    ui->actionPen->trigger();
     background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
   });
 }
@@ -131,7 +146,7 @@ void Pixelite::on_actionFill_triggered(bool on)
   if (!on)
     return;
 
-  ui->drawPane->fillColorMode([this] { ui->actionFill->setChecked(false); });
+  ui->drawPane->fillColorMode([this] { ui->actionPen->trigger(); });
 }
 
 void Pixelite::background(QWidget *w, const QColor &c)

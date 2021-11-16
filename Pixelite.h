@@ -30,6 +30,7 @@ private slots:
   void on_actionQuit_triggered();
 
   void on_acColor_triggered();
+  void on_actionPen_triggered(bool);
   void on_acSelectColor_triggered(bool);
   void on_actionFill_triggered(bool);
 

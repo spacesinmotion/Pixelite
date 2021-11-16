@@ -119,7 +119,6 @@ void DrawPane::leftAction()
   else if (_currentMode == PickColor)
   {
     _currentColor = _img.pixelColor(_pixel);
-    _currentMode = Draw;
     if (_onFished)
     {
       _onFished();
@@ -130,7 +129,6 @@ void DrawPane::leftAction()
   {
     start_action();
     fill(_pixel, _currentColor.rgba(), _img.pixel(_pixel));
-    _currentMode = Draw;
     if (_onFished)
     {
       _onFished();
@@ -153,7 +151,6 @@ void DrawPane::rightAction()
   {
     start_action();
     fill(_pixel, QColor(Qt::transparent).rgba(), _img.pixel(_pixel));
-    _currentMode = Draw;
     if (_onFished)
     {
       _onFished();
