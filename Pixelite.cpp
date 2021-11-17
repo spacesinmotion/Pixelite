@@ -21,14 +21,13 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   ag->addAction(ui->actionFill);
   ui->actionPen->setChecked(true);
 
-  background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
-
   connect(ui->drawPane, &DrawPane::undoAvailable, ui->actionUndo, &QAction::setEnabled);
   connect(ui->drawPane, &DrawPane::redoAvailable, ui->actionRedo, &QAction::setEnabled);
   connect(ui->actionUndo, &QAction::triggered, ui->drawPane, &DrawPane::undo);
   connect(ui->actionRedo, &QAction::triggered, ui->drawPane, &DrawPane::redo);
 
   loadSettings();
+  background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
 
   if (_path.isEmpty())
     ui->drawPane->newImage(QSize(16, 16));
@@ -160,6 +159,8 @@ void Pixelite::loadSettings()
   restoreGeometry(s.value("Main/Geometry").toByteArray());
   restoreState(s.value("Main/State").toByteArray());
 
+  ui->drawPane->setCurrentColor(QColor(s.value("Main/Color", "#000000").toString()));
+
   auto recent = s.value("Main/RecentFiles").toStringList();
   if (!recent.isEmpty())
     _path = recent.front();
@@ -170,6 +171,7 @@ void Pixelite::saveSettings() const
   QSettings s;
   s.setValue("Main/Geometry", saveGeometry());
   s.setValue("Main/State", saveState());
+  s.setValue("Main/Color", ui->drawPane->currentColor().name(QColor::HexArgb));
 }
 
 void Pixelite::closeEvent(QCloseEvent *ce)
