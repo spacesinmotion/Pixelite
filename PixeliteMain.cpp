@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
   a.setApplicationVersion("0.0");
   a.setOrganizationName("pjame");
 
+  a.setWindowIcon(QIcon(":icons/Pixelite.png"));
+
   QSettings::setDefaultFormat(QSettings::IniFormat);
 
   Pixelite w;

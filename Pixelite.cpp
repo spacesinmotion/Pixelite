@@ -94,6 +94,7 @@ bool Pixelite::on_actionSave_triggered()
 
   ui->drawPane->currentImage().save(_path);
   ui->drawPane->mark_saved();
+  updateWindowTitle();
   return true;
 }
 
@@ -108,6 +109,7 @@ bool Pixelite::on_actionSave_as_triggered()
   _path = p;
   ui->drawPane->currentImage().save(_path);
   ui->drawPane->mark_saved();
+  updateWindowTitle();
   addRecent(p);
   return true;
 }
