@@ -47,6 +47,10 @@ void Pixelite::on_actionNew_triggered()
 
   auto *newImageD = new NewImageDialog(ui->centralwidget);
   ui->centralwidget->layout()->addWidget(newImageD);
+  newImageD->onCancel([this, newImageD] {
+    ui->drawPane->show();
+    newImageD->deleteLater();
+  });
   newImageD->onAppy([this, newImageD](const auto &s) {
     _path.clear();
     ui->drawPane->newImage(s);

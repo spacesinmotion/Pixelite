@@ -15,8 +15,19 @@ void NewImageDialog::onAppy(const ApplyCB &cb)
   _onApply = cb;
 }
 
+void NewImageDialog::onCancel(const CancelCB &cb)
+{
+  _onCancel = cb;
+}
+
 void NewImageDialog::on_pbOk_clicked()
 {
   if (_onApply)
     _onApply(QSize(ui->spWidth->value(), ui->spHeight->value()));
+}
+
+void NewImageDialog::on_pbCancel_clicked()
+{
+  if (_onCancel)
+    _onCancel();
 }
