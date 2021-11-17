@@ -40,6 +40,8 @@ private:
   void loadSettings();
   void saveSettings() const;
 
+  void updateWindowTitle();
+
   void closeEvent(QCloseEvent *ce) final;
 
   bool check_saved();
