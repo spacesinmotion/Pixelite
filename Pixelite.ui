@@ -202,6 +202,10 @@
    </property>
   </action>
   <action name="actionclear_recent">
+   <property name="icon">
+    <iconset resource="Pixelite.qrc">
+     <normaloff>:/icons/icons/clear.png</normaloff>:/icons/icons/clear.png</iconset>
+   </property>
    <property name="text">
     <string>clear recent</string>
    </property>

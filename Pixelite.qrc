@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/clear.png</file>
     <file alias="Pixelite.png">icons/Pixelite.png</file>
     <file>icons/fill.png</file>
     <file>icons/redo.png</file>
