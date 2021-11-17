@@ -78,9 +78,11 @@
    </attribute>
    <addaction name="separator"/>
    <addaction name="acColor"/>
+   <addaction name="separator"/>
    <addaction name="actionPen"/>
    <addaction name="acSelectColor"/>
    <addaction name="actionFill"/>
+   <addaction name="separator"/>
   </widget>
   <action name="acSelectColor">
    <property name="checkable">
