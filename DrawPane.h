@@ -18,7 +18,7 @@ class DrawPane : public QWidget
 
   QPoint _pixel;
 
-  QColor _currentColor;
+  int _currentColorIndex;
 
   enum Mode
   {
@@ -36,12 +36,10 @@ class DrawPane : public QWidget
 public:
   explicit DrawPane(QWidget *parent = nullptr);
 
-  const QColor &currentColor() { return _currentColor; }
-  void setCurrentColor(const QColor &c)
-  {
-    _currentColor = c;
-    update();
-  }
+  QColor currentColor() { return _img.color(_currentColorIndex); }
+  void setCurrentColor(const QColor &c);
+  QVector<QRgb> calc_color_table() const;
+  QVector<QRgb> get_color_table() const;
 
   void drawMode() { _currentMode = Draw; }
   void pickColorMode(const CB &onFinish)
@@ -69,13 +67,15 @@ public slots:
 signals:
   void undoAvailable(bool);
   void redoAvailable(bool);
+  void imageChanged();
 
 private:
   void push_undo();
   void start_action();
+  void action_done();
 
-  void draw(const QPoint &p, const QColor &c);
-  void fill(const QPoint &p, const QRgb &c, const QRgb &t);
+  void draw(const QPoint &p, int index);
+  void fill(const QPoint &p, int c, int t);
   void leftAction();
   void rightAction();
 

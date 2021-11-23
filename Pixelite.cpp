@@ -1,5 +1,6 @@
 #include "Pixelite.h"
 
+#include "ColorPalette.h"
 #include "NewImageDialog.h"
 #include "ui_Pixelite.h"
 
@@ -21,11 +22,17 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   ag->addAction(ui->actionFill);
   ui->actionPen->setChecked(true);
 
+  ui->toolBar->addWidget(
+      new ColorPalette{[this] { return ui->drawPane->get_color_table(); }, this});
+
   connect(ui->drawPane, &DrawPane::undoAvailable, ui->actionUndo, &QAction::setEnabled);
-  connect(ui->drawPane, &DrawPane::undoAvailable, this, [this] { updateWindowTitle(); });
   connect(ui->drawPane, &DrawPane::redoAvailable, ui->actionRedo, &QAction::setEnabled);
   connect(ui->actionUndo, &QAction::triggered, ui->drawPane, &DrawPane::undo);
   connect(ui->actionRedo, &QAction::triggered, ui->drawPane, &DrawPane::redo);
+  connect(ui->drawPane, &DrawPane::imageChanged, this, [this] {
+    updateWindowTitle();
+    background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
+  });
 
   loadSettings();
   background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
@@ -167,7 +174,7 @@ void Pixelite::loadSettings()
   restoreGeometry(s.value("Main/Geometry").toByteArray());
   restoreState(s.value("Main/State").toByteArray());
 
-  ui->drawPane->setCurrentColor(QColor(s.value("Main/Color", "#000000").toString()));
+  // ui->drawPane->setCurrentColor(QColor(s.value("Main/Color", "#000000").toString()));
 
   const auto recent = s.value("Main/RecentFiles").toStringList();
   if (!recent.isEmpty())
@@ -179,7 +186,7 @@ void Pixelite::saveSettings() const
   QSettings s;
   s.setValue("Main/Geometry", saveGeometry());
   s.setValue("Main/State", saveState());
-  s.setValue("Main/Color", ui->drawPane->currentColor().name(QColor::HexArgb));
+  // s.setValue("Main/Color", ui->drawPane->currentColor().name(QColor::HexArgb));
 }
 
 void Pixelite::updateWindowTitle()

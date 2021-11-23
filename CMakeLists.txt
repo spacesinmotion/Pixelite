@@ -26,6 +26,8 @@ add_executable(Pixelite
   NewImageDialog.ui
   DrawPane.cpp
   DrawPane.h
+  ColorPalette.cpp
+  ColorPalette.h
 )
 
 target_include_directories(Pixelite PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

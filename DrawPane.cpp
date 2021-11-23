@@ -1,13 +1,47 @@
 #include "DrawPane.h"
 
+#include <QDebug>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QSet>
 #include <QWheelEvent>
 #include <cmath>
 
 DrawPane::DrawPane(QWidget *parent) : QWidget{parent}
 {
   setMouseTracking(true);
+}
+
+void DrawPane::setCurrentColor(const QColor &c)
+{
+  auto i = _img.colorTable().indexOf(c.rgba());
+  if (i < 0)
+  {
+    start_action();
+    i = _img.colorCount();
+    _img.setColorCount(i + 1);
+    _img.setColor(i, c.rgba());
+  }
+  _currentColorIndex = i;
+  action_done();
+  update();
+}
+
+QVector<QRgb> DrawPane::calc_color_table() const
+{
+  QSet<QRgb> unique{qRgba(0, 0, 0, 0)};
+  for (int i = 0; i < _img.width(); ++i)
+    for (int j = 0; j < _img.height(); ++j)
+      unique.insert(_img.pixelColor(i, j).rgba());
+
+  auto vec = unique.values().toVector();
+  std::sort(vec.begin(), vec.end());
+  return vec;
+}
+
+QVector<QRgb> DrawPane::get_color_table() const
+{
+  return _img.colorTable();
 }
 
 void DrawPane::setCurrentImage(const QImage &img)
@@ -18,6 +52,24 @@ void DrawPane::setCurrentImage(const QImage &img)
   emit redoAvailable(false);
   mark_saved();
   _img = img;
+  if (_img.format() != QImage::Format_Indexed8)
+  {
+    start_action();
+    auto x = calc_color_table();
+    for (const auto &c : x)
+      qDebug() << QColor::fromRgba(c).name(QColor::HexArgb) << c;
+    QHash<QRgb, int> h;
+    for (int i = 0; i < x.size(); ++i)
+      h[x[i]] = i;
+    QImage im(_img.size(), QImage::Format_Indexed8);
+    im.setColorTable(x);
+    for (int i = 0; i < im.width(); ++i)
+      for (int j = 0; j < im.width(); ++j)
+        im.setPixel(i, j, h[_img.pixel(i, j)]);
+    _img = im;
+  }
+  _currentColorIndex = std::min(1, _img.colorCount());
+  action_done();
 
   _back_img = QImage(_img.width() * 2, _img.height() * 2, QImage::Format_ARGB32);
   for (int i = 0; i < _back_img.width(); ++i)
@@ -34,7 +86,7 @@ void DrawPane::setCurrentImage(const QImage &img)
 
 void DrawPane::newImage(const QSize &s)
 {
-  QImage i(s, QImage::Format_ARGB32);
+  QImage i(s, QImage::Format_Indexed8);
   i.fill(Qt::transparent);
   setCurrentImage(i);
 }
@@ -89,14 +141,20 @@ void DrawPane::start_action()
   _actionStart = false;
 }
 
-void DrawPane::draw(const QPoint &p, const QColor &c)
+void DrawPane::action_done()
 {
-  _img.setPixel(p, c.rgba());
+  _actionStart = true;
+  emit imageChanged();
 }
 
-void DrawPane::fill(const QPoint &p, const QRgb &c, const QRgb &t)
+void DrawPane::draw(const QPoint &p, int index)
 {
-  if (!_img.rect().contains(p) || _img.pixel(p) == c || _img.pixel(p) != t)
+  _img.setPixel(p, index);
+}
+
+void DrawPane::fill(const QPoint &p, int c, int t)
+{
+  if (!_img.rect().contains(p) || _img.pixelIndex(p) == c || _img.pixelIndex(p) != t)
     return;
 
   _img.setPixel(p, c);
@@ -114,11 +172,11 @@ void DrawPane::leftAction()
   if (_currentMode == Draw)
   {
     start_action();
-    draw(_pixel, _currentColor);
+    draw(_pixel, _currentColorIndex);
   }
   else if (_currentMode == PickColor)
   {
-    _currentColor = _img.pixelColor(_pixel);
+    _currentColorIndex = _img.pixelIndex(_pixel);
     if (_onFished)
     {
       _onFished();
@@ -128,7 +186,7 @@ void DrawPane::leftAction()
   else if (_currentMode == FillColor)
   {
     start_action();
-    fill(_pixel, _currentColor.rgba(), _img.pixel(_pixel));
+    fill(_pixel, _currentColorIndex, _img.pixelIndex(_pixel));
     if (_onFished)
     {
       _onFished();
@@ -145,12 +203,12 @@ void DrawPane::rightAction()
   if (_currentMode == Draw)
   {
     start_action();
-    draw(_pixel, Qt::transparent);
+    draw(_pixel, 0);
   }
   else if (_currentMode == FillColor)
   {
     start_action();
-    fill(_pixel, QColor(Qt::transparent).rgba(), _img.pixel(_pixel));
+    fill(_pixel, 0, _img.pixelIndex(_pixel));
     if (_onFished)
     {
       _onFished();
@@ -251,7 +309,7 @@ void DrawPane::mouseMoveEvent(QMouseEvent *me)
 
 void DrawPane::mouseReleaseEvent(QMouseEvent *me)
 {
-  _actionStart = true;
+  action_done();
   QWidget::mouseReleaseEvent(me);
 }
 
