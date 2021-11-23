@@ -1,5 +1,6 @@
 #include "ColorPalette.h"
 
+#include <QMouseEvent>
 #include <QPainter>
 
 ColorPalette::ColorPalette(const std::function<QVector<QRgb>()> &getter, QWidget *parent) :
@@ -11,10 +12,8 @@ ColorPalette::ColorPalette(const std::function<QVector<QRgb>()> &getter, QWidget
 ColorPalette::~ColorPalette()
 {}
 
-void ColorPalette::paintEvent(QPaintEvent *pe)
+void ColorPalette::eachRectColor(const std::function<bool(const QRect &, QRgb)> &cb) const
 {
-  QPainter p{this};
-
   auto colors = _colorGetter();
 
   const auto pix = width() / 3;
@@ -31,15 +30,40 @@ void ColorPalette::paintEvent(QPaintEvent *pe)
       if (c >= colors.end())
         break;
 
-      p.setPen(Qt::transparent);
-      p.setBrush(QColor(*c));
-      p.drawRect(i * pix, line * pix, pix, pix);
+      if (!cb(QRect(i * pix, line * pix, pix, pix), *c))
+        break;
       ++c;
     }
     ++line;
   }
+}
+
+void ColorPalette::paintEvent(QPaintEvent *pe)
+{
+  QPainter p{this};
+
+  p.setPen(Qt::transparent);
+  eachRectColor([&p](const auto &r, const auto &c) {
+    p.setBrush(QColor::fromRgba(c));
+    p.drawRect(r);
+    return true;
+  });
 
   p.setPen(Qt::black);
   p.setBrush(Qt::transparent);
   p.drawRect(0, 0, width() - 1, height() - 1);
+}
+
+void ColorPalette::mouseReleaseEvent(QMouseEvent *me)
+{
+  const auto mp = me->pos();
+  eachRectColor([&](const auto &r, const auto &c) {
+    if (r.contains(mp))
+    {
+      emit colorClicked(c);
+      return false;
+    }
+    return true;
+  });
+  QWidget::mouseReleaseEvent(me);
 }

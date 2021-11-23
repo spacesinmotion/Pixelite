@@ -22,8 +22,12 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   ag->addAction(ui->actionFill);
   ui->actionPen->setChecked(true);
 
-  ui->toolBar->addWidget(
-      new ColorPalette{[this] { return ui->drawPane->get_color_table(); }, this});
+  auto *colorPalette = new ColorPalette{[this] { return ui->drawPane->get_color_table(); }, this};
+  connect(colorPalette, &ColorPalette::colorClicked, this, [this](const auto &c) {
+    ui->drawPane->setCurrentColor(QColor::fromRgba(c));
+    background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
+  });
+  ui->toolBar->addWidget(colorPalette);
 
   connect(ui->drawPane, &DrawPane::undoAvailable, ui->actionUndo, &QAction::setEnabled);
   connect(ui->drawPane, &DrawPane::redoAvailable, ui->actionRedo, &QAction::setEnabled);
