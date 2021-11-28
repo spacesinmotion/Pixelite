@@ -262,15 +262,13 @@ void DrawPane::paintEvent(QPaintEvent *pe)
   }
 
   p.setTransform(QTransform());
-  p.setBrush(Qt::white);
+  p.setBrush(Qt::lightGray);
   p.setPen(Qt::transparent);
   p.drawRect(QRect(QPoint(width() - _img.width() - 10, 0), _img.size() + QSize(10, 10)));
+  p.setBrush(Qt::white);
+  p.drawRect(QRect(QPoint(width() - _img.width() - 5, 5), _img.size()));
 
   p.drawImage(width() - _img.width() - 5, 5, _img);
-
-  p.setPen(QPen(Qt::darkGray, 0.0));
-  p.setBrush(Qt::transparent);
-  p.drawRect(QRect(QPoint(width() - _img.width() - 5, 5), _img.size()));
 
   return QWidget::paintEvent(pe);
 }
