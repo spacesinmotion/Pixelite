@@ -7,6 +7,7 @@ ColorPalette::ColorPalette(const std::function<QVector<QRgb>()> &getter, QWidget
     QWidget{parent}, _colorGetter{getter}
 {
   setMinimumSize(24, 24 * 6);
+  setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 ColorPalette::~ColorPalette() = default;

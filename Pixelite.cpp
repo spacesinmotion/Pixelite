@@ -25,7 +25,10 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   _colorPalette = new ColorPalette{[this] { return ui->drawPane->get_color_table(); }, this};
   connect(_colorPalette, &ColorPalette::colorClicked, this, [this](int index, const auto &mb) {
     ui->drawPane->setCurrentColorIndex(index);
-    background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
+    if (mb == Qt::RightButton)
+      replaceCurrentColor();
+    else
+      background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
   });
   ui->toolBar->addWidget(_colorPalette);
 
@@ -176,6 +179,15 @@ void Pixelite::on_actionReduce_Palette_triggered()
 void Pixelite::background(QWidget *w, const QColor &c)
 {
   w->setStyleSheet(QString("background-color: %1").arg(c.name()));
+}
+
+void Pixelite::replaceCurrentColor()
+{
+  const auto c = QColorDialog::getColor(ui->drawPane->currentColor(), this);
+  if (c.isValid())
+    ui->drawPane->replaceCurrentColor(c);
+
+  background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
 }
 
 void Pixelite::loadSettings()

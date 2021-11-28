@@ -32,6 +32,12 @@ void DrawPane::setCurrentColor(const QColor &c)
   setCurrentColorIndex(i);
 }
 
+void DrawPane::replaceCurrentColor(const QColor &c)
+{
+  _img.setColor(_currentColorIndex, c.rgba());
+  update();
+}
+
 QVector<QRgb> DrawPane::calc_color_table() const
 {
   QSet<QRgb> unique{qRgba(0, 0, 0, 0)};

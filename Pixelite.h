@@ -40,6 +40,8 @@ private slots:
 private:
   static void background(QWidget *w, const QColor &c);
 
+  void replaceCurrentColor();
+
   void loadSettings();
   void saveSettings() const;
 
