@@ -257,7 +257,7 @@ void DrawPane::paintEvent(QPaintEvent *pe)
 
   if (_img.rect().contains(_pixel))
   {
-    p.setPen(QPen(Qt::red, 0.0));
+    p.setPen(QPen(Qt::lightGray, 0.0));
     p.drawRect(QRect(_pixel, QSize(1, 1)));
   }
 
