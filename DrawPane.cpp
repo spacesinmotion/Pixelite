@@ -59,6 +59,7 @@ void DrawPane::reducePalette()
 {
   start_action();
   auto x = calc_color_table();
+  _currentColorIndex = qMax(1, x.indexOf(currentColor().rgba()));
   QHash<QRgb, int> h;
   for (int i = 0; i < x.size(); ++i)
     h[x[i]] = i;
