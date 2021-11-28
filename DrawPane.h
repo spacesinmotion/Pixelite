@@ -37,6 +37,7 @@ public:
   explicit DrawPane(QWidget *parent = nullptr);
 
   QColor currentColor() { return _img.color(_currentColorIndex); }
+  void setCurrentColorIndex(int i);
   void setCurrentColor(const QColor &c);
   QVector<QRgb> calc_color_table() const;
   QVector<QRgb> get_color_table() const;

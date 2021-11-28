@@ -12,6 +12,13 @@ DrawPane::DrawPane(QWidget *parent) : QWidget{parent}
   setMouseTracking(true);
 }
 
+void DrawPane::setCurrentColorIndex(int i)
+{
+  _currentColorIndex = i;
+  action_done();
+  update();
+}
+
 void DrawPane::setCurrentColor(const QColor &c)
 {
   auto i = _img.colorTable().indexOf(c.rgba());
@@ -22,9 +29,7 @@ void DrawPane::setCurrentColor(const QColor &c)
     _img.setColorCount(i + 1);
     _img.setColor(i, c.rgba());
   }
-  _currentColorIndex = i;
-  action_done();
-  update();
+  setCurrentColorIndex(i);
 }
 
 QVector<QRgb> DrawPane::calc_color_table() const

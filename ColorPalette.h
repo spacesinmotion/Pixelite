@@ -14,7 +14,7 @@ public:
   ~ColorPalette();
 
 signals:
-  void colorClicked(const QRgb &);
+  void colorClicked(int index, Qt::MouseButton mb);
 
 private:
   void eachRectColor(const std::function<bool(const QRect &, QRgb)> &cb) const;

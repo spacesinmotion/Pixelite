@@ -9,8 +9,7 @@ ColorPalette::ColorPalette(const std::function<QVector<QRgb>()> &getter, QWidget
   setMinimumSize(24, 24 * 6);
 }
 
-ColorPalette::~ColorPalette()
-{}
+ColorPalette::~ColorPalette() = default;
 
 void ColorPalette::eachRectColor(const std::function<bool(const QRect &, QRgb)> &cb) const
 {
@@ -60,7 +59,8 @@ void ColorPalette::mouseReleaseEvent(QMouseEvent *me)
   eachRectColor([&](const auto &r, const auto &c) {
     if (r.contains(mp))
     {
-      emit colorClicked(c);
+      const auto i = _colorGetter().indexOf(c);
+      emit colorClicked(i, me->button());
       return false;
     }
     return true;
