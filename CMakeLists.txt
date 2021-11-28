@@ -28,6 +28,8 @@ add_executable(Pixelite
   DrawPane.h
   ColorPalette.cpp
   ColorPalette.h
+  ColorSelector.cpp
+  ColorSelector.h
 )
 
 target_include_directories(Pixelite PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

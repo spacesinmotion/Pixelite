@@ -1,6 +1,7 @@
 #include "Pixelite.h"
 
 #include "ColorPalette.h"
+#include "ColorSelector.h"
 #include "NewImageDialog.h"
 #include "ui_Pixelite.h"
 
@@ -135,12 +136,19 @@ void Pixelite::on_actionQuit_triggered()
 
 void Pixelite::on_acColor_triggered()
 {
-  const auto c = QColorDialog::getColor(ui->drawPane->currentColor(), this);
+    const auto c = ColorSelector::getColor(ui->drawPane->currentColor(), this);
   if (c.isValid())
   {
     ui->drawPane->setCurrentColor(c);
     background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
   }
+
+    // const auto c = QColorDialog::getColor(ui->drawPane->currentColor(), this);
+  // if (c.isValid())
+  // {
+  //   ui->drawPane->setCurrentColor(c);
+  //   background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
+  // }
 }
 
 void Pixelite::on_actionPen_triggered(bool on)
