@@ -22,12 +22,12 @@ Pixelite::Pixelite(QWidget *parent) : QMainWindow{parent}, ui{std::make_unique<U
   ag->addAction(ui->actionFill);
   ui->actionPen->setChecked(true);
 
-  auto *colorPalette = new ColorPalette{[this] { return ui->drawPane->get_color_table(); }, this};
-  connect(colorPalette, &ColorPalette::colorClicked, this, [this](const auto &c) {
+  _colorPalette = new ColorPalette{[this] { return ui->drawPane->get_color_table(); }, this};
+  connect(_colorPalette, &ColorPalette::colorClicked, this, [this](const auto &c) {
     ui->drawPane->setCurrentColor(QColor::fromRgba(c));
     background(ui->toolBar->widgetForAction(ui->acColor), ui->drawPane->currentColor());
   });
-  ui->toolBar->addWidget(colorPalette);
+  ui->toolBar->addWidget(_colorPalette);
 
   connect(ui->drawPane, &DrawPane::undoAvailable, ui->actionUndo, &QAction::setEnabled);
   connect(ui->drawPane, &DrawPane::redoAvailable, ui->actionRedo, &QAction::setEnabled);
@@ -165,6 +165,12 @@ void Pixelite::on_actionFill_triggered(bool on)
     return;
 
   ui->drawPane->fillColorMode([this] { ui->actionPen->trigger(); });
+}
+
+void Pixelite::on_actionReduce_Palette_triggered()
+{
+  ui->drawPane->reducePalette();
+  _colorPalette->update();
 }
 
 void Pixelite::background(QWidget *w, const QColor &c)

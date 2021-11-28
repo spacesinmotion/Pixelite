@@ -44,6 +44,22 @@ QVector<QRgb> DrawPane::get_color_table() const
   return _img.colorTable();
 }
 
+void DrawPane::reducePalette()
+{
+  start_action();
+  auto x = calc_color_table();
+  QHash<QRgb, int> h;
+  for (int i = 0; i < x.size(); ++i)
+    h[x[i]] = i;
+  QImage im(_img.size(), QImage::Format_Indexed8);
+  im.setColorTable(x);
+  for (int i = 0; i < im.width(); ++i)
+    for (int j = 0; j < im.width(); ++j)
+      im.setPixel(i, j, h[_img.pixel(i, j)]);
+  _img = im;
+  action_done();
+}
+
 void DrawPane::setCurrentImage(const QImage &img)
 {
   _undoStack.clear();
@@ -53,21 +69,8 @@ void DrawPane::setCurrentImage(const QImage &img)
   mark_saved();
   _img = img;
   if (_img.format() != QImage::Format_Indexed8)
-  {
-    start_action();
-    auto x = calc_color_table();
-    for (const auto &c : x)
-      qDebug() << QColor::fromRgba(c).name(QColor::HexArgb) << c;
-    QHash<QRgb, int> h;
-    for (int i = 0; i < x.size(); ++i)
-      h[x[i]] = i;
-    QImage im(_img.size(), QImage::Format_Indexed8);
-    im.setColorTable(x);
-    for (int i = 0; i < im.width(); ++i)
-      for (int j = 0; j < im.width(); ++j)
-        im.setPixel(i, j, h[_img.pixel(i, j)]);
-    _img = im;
-  }
+    reducePalette();
+
   _currentColorIndex = std::min(1, _img.colorCount());
   action_done();
 

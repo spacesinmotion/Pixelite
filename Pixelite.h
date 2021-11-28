@@ -7,12 +7,14 @@ namespace Ui
 {
 class Pixelite;
 }
+class ColorPalette;
 
 class Pixelite : public QMainWindow
 {
   Q_OBJECT
 
   std::unique_ptr<Ui::Pixelite> ui;
+  ColorPalette *_colorPalette{nullptr};
 
   QString _path;
 
@@ -33,6 +35,7 @@ private slots:
   void on_actionPen_triggered(bool);
   void on_acSelectColor_triggered(bool);
   void on_actionFill_triggered(bool);
+  void on_actionReduce_Palette_triggered();
 
 private:
   static void background(QWidget *w, const QColor &c);

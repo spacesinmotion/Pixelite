@@ -61,6 +61,7 @@
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="actionReduce_Palette"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -238,6 +239,11 @@
    </property>
    <property name="shortcut">
     <string>F</string>
+   </property>
+  </action>
+  <action name="actionReduce_Palette">
+   <property name="text">
+    <string>Reduce Palette</string>
    </property>
   </action>
  </widget>

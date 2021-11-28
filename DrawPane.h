@@ -41,6 +41,8 @@ public:
   QVector<QRgb> calc_color_table() const;
   QVector<QRgb> get_color_table() const;
 
+  void reducePalette();
+
   void drawMode() { _currentMode = Draw; }
   void pickColorMode(const CB &onFinish)
   {
